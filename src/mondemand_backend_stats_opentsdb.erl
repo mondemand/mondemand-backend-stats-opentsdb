@@ -14,7 +14,7 @@
 %% mondemand_backend_stats_handler callbacks
 -export ([ header/0,
            separator/0,
-           format_stat/8,
+           format_stat/10,
            footer/0,
            handle_response/2
          ]).
@@ -71,12 +71,12 @@ header () -> "".
 
 separator () -> "\n".
 
-format_stat (Prefix, ProgId, Host,
+format_stat (_Num, _Total, Prefix, ProgId, Host,
              MetricType, MetricName, MetricValue, Timestamp, Context) ->
   ActualPrefix = case Prefix of undefined -> ""; _ -> [ Prefix, "." ] end,
   [ "put ",
     ActualPrefix,
-    MetricName," ",
+    normalize_metric_name (MetricName)," ",
     io_lib:fwrite ("~b ~b ", [Timestamp, MetricValue]),
     "prog_id=",ProgId," ",
     "host=",Host," ",
@@ -92,3 +92,13 @@ footer () -> "\n".
 handle_response (Response, _) ->
   error_logger:info_msg ("~p : got unexpected response ~p",[?MODULE, Response]),
   { 0, undefined }.
+
+%%====================================================================
+%% internal functions
+%%====================================================================
+normalize_metric_name (MetricName) ->
+  % limit the character set for metric names to alphanumeric and '_'
+  {ok, RE} = ct_expand:term (re:compile ("[^a-zA-Z0-9_]")),
+  % any non-alphanumeric or '_' characters are replaced by '_'
+  re:replace (MetricName, RE, <<"_">>,[global,{return,binary}]).
+
