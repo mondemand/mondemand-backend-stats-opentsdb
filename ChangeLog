@@ -1,3 +1,6 @@
+* Fri Apr 17 2015 Anthony Molinaro <anthonym@alumni.caltech.edu> 0.1.1
+- need to include the parse_transform line for ct_expand to work
+
 * Wed Apr 01 2015 Anthony Molinaro <anthonym@alumni.caltech.edu> 0.1.0
 - fix issue with metric names
 - update to deal with mondemand_server_stats_handler changes

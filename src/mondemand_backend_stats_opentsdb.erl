@@ -22,6 +22,8 @@
 %% supervisor callbacks
 -export ([init/1]).
 
+-compile({parse_transform, ct_expand}).
+
 %%====================================================================
 %% mondemand_server_backend callbacks
 %%====================================================================
