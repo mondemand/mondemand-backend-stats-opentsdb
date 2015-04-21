@@ -1,3 +1,6 @@
+* Tue Apr 21 2015 Anthony Molinaro <anthonym@alumni.caltech.edu> 0.2.0
+- prefix metric name with program_id instead of adding program_id as a tag
+
 * Fri Apr 17 2015 Anthony Molinaro <anthonym@alumni.caltech.edu> 0.1.1
 - need to include the parse_transform line for ct_expand to work
 

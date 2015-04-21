@@ -78,9 +78,9 @@ format_stat (_Num, _Total, Prefix, ProgId, Host,
   ActualPrefix = case Prefix of undefined -> ""; _ -> [ Prefix, "." ] end,
   [ "put ",
     ActualPrefix,
+    normalize_program_id (ProgId), ".",
     normalize_metric_name (MetricName)," ",
     io_lib:fwrite ("~b ~b ", [Timestamp, MetricValue]),
-    "prog_id=",ProgId," ",
     "host=",Host," ",
     "type=",MetricType,
     case Context of
@@ -98,6 +98,11 @@ handle_response (Response, _) ->
 %%====================================================================
 %% internal functions
 %%====================================================================
+normalize_program_id (ProgId) ->
+  % limit the character set for program_id's to alphanumeric, '_' and '.'
+  {ok, RE} = ct_expand:term (re:compile ("[^a-zA-Z0-9_\\.]")),
+  re:replace (ProgId, RE, <<"_">>, [global,{return,binary}]).
+
 normalize_metric_name (MetricName) ->
   % limit the character set for metric names to alphanumeric and '_'
   {ok, RE} = ct_expand:term (re:compile ("[^a-zA-Z0-9_]")),
